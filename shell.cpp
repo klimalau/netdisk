@@ -2,6 +2,8 @@
 
 char pwd[MAX_PATH_LENGTH];
 char npwd[MAX_PATH_LENGTH];
+char ** cmdArgs;
+int cmdArgc;
 
 ACCESS_TYPE getAccessType(string cmd)
 {
@@ -150,39 +152,20 @@ int executeCdCommand(char* arg, int argLen)
 {
     char tempPath[MAX_PATH_LENGTH];
 
-    if (argLen == 0)    //如果cd命令没有参数则失败
+    if (argLen == 0)	//如果cd命令没有参数则失败
     {
         return 0;
     }
     else
     {
-        if (arg[0] == '/')   //如果是绝对路径
-        {
-            if (access(arg, F_OK))  //目录不存在
-            {
-                return 0;
-            }
-            else        //目录存在则直接切换目录了
-            {
-                strncpy(pwd, arg, MAX_PATH_LENGTH);
-                return 1;
-            }
-        }
-        else
-        {
-            strncpy(tempPath, pwd, MAX_PATH_LENGTH);
-            strncat(tempPath, "/", MAX_PATH_LENGTH);
-            strncat(tempPath, arg, MAX_PATH_LENGTH - strlen(tempPath));
-            if (access(tempPath, F_OK)) //目录不存在
-            {
-                return 0;
-            }
-            else
-            {
-                strncpy(pwd, tempPath, MAX_PATH_LENGTH);
-                return 1;
-            }
-        }
+		if (chdir(arg))
+		{
+			printf("no such dir: %s", arg[0]);
+			return 0;
+		}
+		
+		getcwd( pwd, MAX_PATH_LENGTH);
+		return 1;
     }
 }
 

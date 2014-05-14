@@ -13,6 +13,8 @@ using namespace std;
 
 extern char pwd[];
 extern char npwd[];
+extern char **cmdArgs;
+extern int cmdArgc;
 
 typedef enum
 {
